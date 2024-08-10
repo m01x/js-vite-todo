@@ -16,6 +16,74 @@ const initStore = () => {
   console.log('Store inicializado 🆙')
 }
 
+const loadStore = () => {
+  throw new Error('No implementado')
+}
+
+const getTodo = (filter = Filters.All) => {
+  switch (filter) {
+    case Filters.All:
+      //Como state.todos devuelve un objeto... hay que devolver un arreglo con los TODOS requeridos, para eso creamos un nuevo array con spread (...) y el contenido del array
+      return [...state.todos]
+    case Filters.Completed:
+      return state.todos.filter((todo) => todo.done)
+    case Filters.Pending:
+      //todo.done === false
+      return state.todos.filter((todo) => !todo.done)
+    default:
+      throw new Error(`función no permitida, filter: ${filter}`)
+  }
+}
+
+/**
+ *
+ * @param {String} descripcion
+ */
+const addTodo = (descripcion) => {
+  if (!descripcion) throw new Error('Error: Descripcion requerida!')
+  state.todos.push(new Todo(descripcion))
+}
+
+/**
+ *
+ * @param {String} todoId
+ */
+const toggleTodo = (todoId) => {
+  throw new Error('No implementado')
+}
+
+/**
+ *
+ * @param {String} todoId
+ */
+const deleteTodo = (todoId) => {
+  state.todos = state.todos.filter((todo) => todo.id !== todoId)
+}
+
+const deleteCompleted = () => {
+  state.todos = state.todos.filter((todo) => todo.done)
+}
+
+/**
+ *
+ * @param {Filters} newFilter
+ */
+const setFilter = (newFilter = Filters.all) => {
+  //TODO buscar que solo se puedan ejecutar los filtros definidos
+  state.filter = newFilter
+}
+
+const getCurrentFilter = () => {
+  return state.filter
+}
 export default {
-  initStore
+  initStore,
+  loadStore,
+  addTodo,
+  toggleTodo,
+  deleteTodo,
+  deleteCompleted,
+  setFilter,
+  getCurrentFilter,
+  getTodo
 }
