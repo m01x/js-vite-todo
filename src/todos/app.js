@@ -17,7 +17,7 @@ export const App = (elementId) => {
     renderTodos(ElementIDs.TodoList, todos)
   }
 
-  //Funcion anonima, auto invocada. Esto se llama cuando la funcion APP se llama...
+  //Funcion anonima, auto invocada. Esto se ejecuta cuando la funcion APP se llama...
   ;(() => {
     const app = document.createElement('div')
     app.innerHTML = html
@@ -27,6 +27,7 @@ export const App = (elementId) => {
 
   //Referencias HTML
   const newDescriptionInput = document.querySelector(ElementIDs.NewTodoInputs)
+  const todoListUL = document.querySelector(ElementIDs.TodoList)
 
   //Listeners
   newDescriptionInput.addEventListener('keyup', (event) => {
@@ -36,5 +37,22 @@ export const App = (elementId) => {
     todoStore.addTodo(event.target.value)
     displayTodos()
     event.target.value = ''
+  })
+
+  todoListUL.addEventListener('click', (event) => {
+    const element = event.target.closest('[data-id]')
+    todoStore.toggleTodo(element.getAttribute('data-id'))
+    displayTodos()
+  })
+
+  todoListUL.addEventListener('click', (event) => {
+    const isDestroyElement = event.target.className === 'destroy'
+    const element = event.target.closest('[data-id]')
+
+    //validamos si tenemos elemento y algo con la clase destroy (es el btn)
+    if (!element || !isDestroyElement) return
+
+    todoStore.deleteTodo(element.getAttribute('data-id'))
+    displayTodos()
   })
 }
